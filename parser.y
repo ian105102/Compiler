@@ -33,6 +33,7 @@ void popJumpLabel() {
     if (jumpLabelTop >= 0) {
         jumpLabelTop--;
     } else {
+        // 堆疊底部錯誤處理
         fprintf(stderr, "jumpLabelStack underflow\n");
         exit(1);
     }
@@ -41,7 +42,9 @@ void popJumpLabel() {
 int currentJumpLabel() {
     if (jumpLabelTop >= 0) {
         return jumpLabelStack[jumpLabelTop];
-    } else {        return -1;
+    } else {
+        // 沒有標籤時返回預設值
+        return -1;
     }
 }
 char* newLabel() {
@@ -58,7 +61,7 @@ char* concatCode(int count, ...) {
     for (int i = 0; i < count; i++) {
         char* s = va_arg(args, char*);
         if (s && strlen(s) > 0) {
-            totalLen += strlen(s) + 1; 
+            totalLen += strlen(s) + 1; // +1 給換行或空白
         }
     }
     va_end(args);
@@ -71,7 +74,7 @@ char* concatCode(int count, ...) {
         char* s = va_arg(args, char*);
         if (s && strlen(s) > 0) {
             if (strlen(result) > 0) {
-                strcat(result, "\n");
+                strcat(result, "\n"); // 僅在前面有東西時換行
             }
             strcat(result, s);
         }
@@ -81,15 +84,6 @@ char* concatCode(int count, ...) {
     return result;
 }
 
-void emit(const char* fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    
-    vfprintf(stdout, fmt, args);
-    va_end(args);
-
-    putchar('\n');  
-}
 
 
 struct exprType {
@@ -155,12 +149,12 @@ using_list
 
 class_declaration
     : CLASS IDENTIFIER LBRACE class_body RBRACE{
-    	emit("TAC Start");
-    	emit("");
-    	emit($4);
-    	emit("");
-    	emit("TAC End");
-    	emit("");
+	printf("TAC Start\n");
+	printf("\n");
+	printf("%s\n", $4);
+	printf("\n");
+	printf("TAC End\n");
+	printf("\n");
     }
 
     ;
