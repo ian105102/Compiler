@@ -164,7 +164,7 @@ class_body
     	$$ =strdup("");
     }
     | class_body class_body_entry{
-    	 $$ =concatCode(2, $2, $1);
+    	 $$ =concatCode(2, $1, $2);
     }
     ;
 
